@@ -1,0 +1,36 @@
+<!-- templates/registration/logout.html -->
+{% extends 'base/base.html' %}
+
+{% block title %}Sign Out - Django + HTMX{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2 class="card-title mb-1">
+                    <i class="bi bi-box-arrow-right me-2"></i>
+                    Sign Out
+                </h2>
+            </div>
+            <div class="card-body text-center">
+                <p class="text-muted mb-4">Are you sure you want to sign out?</p>
+                
+                <div class="d-grid gap-2">
+                    <form method="post" action="{% url 'accounts:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-box-arrow-right me-2"></i>
+                            Yes, Sign Me Out
+                        </button>
+                    </form>
+                    <a href="{% url 'core:home' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

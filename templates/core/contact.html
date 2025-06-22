@@ -1,0 +1,105 @@
+<!-- templates/core/contact.html -->
+{% extends 'base/base.html' %}
+
+{% block title %}Contact - Django + HTMX{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title mb-0">
+                    <i class="bi bi-envelope-fill me-2"></i>
+                    Submit an Inquiry
+                </h2>
+                <p class="text-muted mb-0">
+                    All fields are validated in real-time.
+                </p>
+            </div>
+            <div class="card-body">
+                <div id="contact-form-container">
+                    {% include 'partials/contact_form.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Contact Information -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Contact Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6><i class="bi bi-envelope-fill me-2"></i>Email</h6>
+                    <p class="text-muted">info@djangohtmx.com</p>
+                </div>
+                <div class="mb-3">
+                    <h6><i class="bi bi-telephone-fill me-2"></i>Phone</h6>
+                    <p class="text-muted">+1 (555) 123-4567</p>
+                </div>
+                <div class="mb-3">
+                    <h6><i class="bi bi-geo-alt-fill me-2"></i>Address</h6>
+                    <p class="text-muted">
+                        123 Django Street<br>
+                        HTMX City, DC 12345<br>
+                        United States
+                    </p>
+                </div>
+                <div>
+                    <h6><i class="bi bi-clock-fill me-2"></i>Business Hours</h6>
+                    <p class="text-muted">
+                        Monday - Friday: 9:00 AM - 6:00 PM<br>
+                        Saturday: 10:00 AM - 4:00 PM<br>
+                        Sunday: Closed
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {% if recent_contacts %}
+            <!-- Recent Contacts (Staff Only) -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-clock-history me-2"></i>
+                        Recent Inquiries
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for contact in recent_contacts %}
+                            <div class="list-group-item px-0">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ contact.subject|truncatechars:30 }}</h6>
+                                    <small class="text-{% if contact.is_resolved %}success{% else %}warning{% endif %}">
+                                        {% if contact.is_resolved %}
+                                            <i class="bi bi-check-circle-fill"></i> Resolved
+                                        {% else %}
+                                            <i class="bi bi-clock-fill"></i> Pending
+                                        {% endif %}
+                                    </small>
+                                </div>
+                                <p class="mb-1 small">{{ contact.message|truncatewords:15 }}</p>
+                                <small class="text-muted">
+                                    From: {{ contact.name }} • {{ contact.created_at|timesince }} ago
+                                </small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'core:contact_list' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-list-check me-1"></i>
+                            View All Inquiries
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

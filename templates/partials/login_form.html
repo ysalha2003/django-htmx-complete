@@ -1,0 +1,51 @@
+<!-- templates/partials/login_form.html -->
+<form hx-post="{% url 'accounts:login' %}" 
+      hx-target="#login-form-container" 
+      hx-swap="innerHTML"
+      novalidate>
+    {% csrf_token %}
+    
+    <div class="mb-3">
+        <label for="{{ form.username.id_for_label }}" class="form-label">
+            Username <span class="text-danger">*</span>
+        </label>
+        {{ form.username }}
+        <div id="login-username-validation"></div>
+        {% if form.username.errors %}
+            <div class="validation-error">
+                <i class="bi bi-x-circle-fill"></i>
+                {{ form.username.errors|first }}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        <label for="{{ form.password.id_for_label }}" class="form-label">
+            Password <span class="text-danger">*</span>
+        </label>
+        {{ form.password }}
+        <div id="login-password-validation"></div>
+        {% if form.password.errors %}
+            <div class="validation-error">
+                <i class="bi bi-x-circle-fill"></i>
+                {{ form.password.errors|first }}
+            </div>
+        {% endif %}
+    </div>
+    
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <span class="htmx-indicator spinner-border spinner-border-sm me-2" role="status"></span>
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            Sign In
+        </button>
+    </div>
+</form>

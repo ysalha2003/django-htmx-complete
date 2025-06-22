@@ -1,0 +1,229 @@
+<!-- templates/core/home.html -->
+{% extends 'base/base.html' %}
+
+{% block title %}Home - Django + HTMX Platform{% endblock %}
+{% block description %}A production-ready boilerplate demonstrating real-time validation and modern UX patterns with Django and HTMX.{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        <!-- Hero Section -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3">
+                <span style="background: var(--primary-gradient); background-clip: text; -webkit-background-clip: text; color: transparent;">
+                    Server-Driven
+                </span>
+                Web Application
+            </h1>
+            <p class="lead text-muted mb-4">
+                A production-ready boilerplate demonstrating real-time validation and modern UX patterns 
+                with a server-centric, HTMX-powered architecture.
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{% url 'core:contact' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-envelope-fill me-2"></i>
+                    Submit Inquiry
+                </a>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'accounts:register' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-person-plus-fill me-2"></i>
+                        Provision Account
+                    </a>
+                {% endif %}
+                {% if user.is_authenticated %}
+                    <a href="{% url 'accounts:profile' %}" class="btn btn-outline-success btn-lg">
+                        <i class="bi bi-person-gear me-2"></i>
+                        Update Profile
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="bi bi-envelope-check-fill text-primary fs-1 mb-3"></i>
+                        <h3 class="text-primary">{{ total_contacts }}</h3>
+                        <h6 class="card-title">Total Inquiries</h6>
+                        <p class="card-text text-muted">All messages received via the contact endpoint</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="bi bi-check-circle-fill text-success fs-1 mb-3"></i>
+                        <h3 class="text-success">{{ resolved_contacts }}</h3>
+                        <h6 class="card-title">Resolved Inquiries</h6>
+                        <p class="card-text text-muted">Tickets marked with 'resolved' status</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="bi bi-people-fill text-info fs-1 mb-3"></i>
+                        <h3 class="text-info">{{ newsletter_subscribers }}</h3>
+                        <h6 class="card-title">Active Subscribers</h6>
+                        <p class="card-text text-muted">Users subscribed to the mailing list</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-lightning-charge-fill text-warning fs-1 mb-3"></i>
+                        <h5 class="card-title">Asynchronous Validation</h5>
+                        <p class="card-text">
+                            Form fields are validated on the server in real-time without full page reloads.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-server text-success fs-1 mb-3"></i>
+                        <h5 class="card-title">Server-Centric Logic</h5>
+                        <p class="card-text">
+                            All business logic and state management are handled by Django for maximum security.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-shield-fill-check text-primary fs-1 mb-3"></i>
+                        <h5 class="card-title">Secure Auth Module</h5>
+                        <p class="card-text">
+                            Full authentication system including user profiles, password management, and access control.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-code-slash text-info fs-1 mb-3"></i>
+                        <h5 class="card-title">Zero JS Frameworks</h5>
+                        <p class="card-text">
+                            A modern, interactive UX built with declarative HTMX attributes directly in the HTML.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter Subscription -->
+        <div class="card bg-primary text-white mb-5">
+            <div class="card-body text-center">
+                <h3 class="card-title">Subscribe for Updates</h3>
+                <p class="card-text">Receive updates and release notes for this project.</p>
+                
+                <form hx-post="{% url 'core:newsletter_subscribe' %}" 
+                      hx-target="#newsletter-form-container" 
+                      hx-swap="innerHTML"
+                      class="row g-3 justify-content-center"
+                      novalidate>
+                    {% csrf_token %}
+                    <div id="newsletter-form-container">
+                        <div class="col-auto">
+                            <input type="email" 
+                                   name="email" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Enter your email address"
+                                   hx-post="/validate/newsletter-email/"
+                                   hx-trigger="keyup changed delay:500ms"
+                                   hx-target="#newsletter-validation"
+                                   hx-swap="innerHTML"
+                                   style="border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.9); color: #333;"
+                                   required>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-light btn-lg">
+                                <span class="htmx-indicator spinner-border spinner-border-sm me-2" role="status"></span>
+                                <i class="bi bi-envelope-plus-fill me-2"></i>
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                    <div id="newsletter-validation" class="w-100 text-center mt-2"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Demo Features -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title mb-0">
+                    <i class="bi bi-gear-fill me-2"></i>
+                    Core Functionality
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h5 class="text-primary">
+                            <i class="bi bi-envelope-fill me-2"></i>
+                            Contact Form Endpoints
+                        </h5>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Name validation (letters/spaces)</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Email format and history check</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Subject length validation</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Message content validation</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Inquiry category selection</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <h5 class="text-success">
+                            <i class="bi bi-person-plus-fill me-2"></i>
+                            Authentication Module
+                        </h5>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Username availability check</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Name and email uniqueness validation</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Password strength meter</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Password confirmation matching</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>Secure credential validation on login</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i>User profile and password management</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-4 p-3 bg-light rounded">
+                    <h6 class="fw-bold text-dark">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        Technical Stack
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled small mb-0">
+                                <li>• Package Management: `uv`</li>
+                                <li>• Core Framework: Django 5.x</li>
+                                <li>• UI Interactivity: HTMX 2.x</li>
+                                <li>• Styling: Bootstrap 5.x</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled small mb-0">
+                                <li>• Admin Interface: Enhanced</li>
+                                <li>• Error Handling: Comprehensive</li>
+                                <li>• Design: Progressive Enhancement</li>
+                                <li>• Responsiveness: Mobile-first</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

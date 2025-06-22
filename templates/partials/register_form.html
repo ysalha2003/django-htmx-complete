@@ -1,0 +1,118 @@
+<!-- templates/partials/register_form.html -->
+<form hx-post="{% url 'accounts:register' %}" 
+      hx-target="#register-form-container" 
+      hx-swap="innerHTML"
+      novalidate>
+    {% csrf_token %}
+    
+    <!-- Name Fields Row -->
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                First Name <span class="text-danger">*</span>
+            </label>
+            {{ form.first_name }}
+            <div id="first-name-validation"></div>
+            {% if form.first_name.errors %}
+                <div class="validation-error">
+                    <i class="bi bi-x-circle-fill"></i>
+                    {{ form.first_name.errors|first }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-6">
+            <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                Last Name <span class="text-danger">*</span>
+            </label>
+            {{ form.last_name }}
+            <div id="last-name-validation"></div>
+            {% if form.last_name.errors %}
+                <div class="validation-error">
+                    <i class="bi bi-x-circle-fill"></i>
+                    {{ form.last_name.errors|first }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Username Field -->
+    <div class="mb-3">
+        <label for="{{ form.username.id_for_label }}" class="form-label">
+            Username <span class="text-danger">*</span>
+        </label>
+        {{ form.username }}
+        <div id="username-validation"></div>
+        {% if form.username.errors %}
+            <div class="validation-error">
+                <i class="bi bi-x-circle-fill"></i>
+                {{ form.username.errors|first }}
+            </div>
+        {% endif %}
+        <div class="form-text">Choose a unique username. Letters, numbers, and @.+-_ only.</div>
+    </div>
+    
+    <!-- Email Field -->
+    <div class="mb-3">
+        <label for="{{ form.email.id_for_label }}" class="form-label">
+            Email Address <span class="text-danger">*</span>
+        </label>
+        {{ form.email }}
+        <div id="email-validation"></div>
+        {% if form.email.errors %}
+            <div class="validation-error">
+                <i class="bi bi-x-circle-fill"></i>
+                {{ form.email.errors|first }}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Password Fields Row -->
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label for="{{ form.password1.id_for_label }}" class="form-label">
+                Password <span class="text-danger">*</span>
+            </label>
+            {{ form.password1 }}
+            <div id="password-validation"></div>
+            {% if form.password1.errors %}
+                <div class="validation-error">
+                    <i class="bi bi-x-circle-fill"></i>
+                    {{ form.password1.errors|first }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-6">
+            <label for="{{ form.password2.id_for_label }}" class="form-label">
+                Confirm Password <span class="text-danger">*</span>
+            </label>
+            {{ form.password2 }}
+            <div id="password2-validation"></div>
+            {% if form.password2.errors %}
+                <div class="validation-error">
+                    <i class="bi bi-x-circle-fill"></i>
+                    {{ form.password2.errors|first }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Non-field Errors -->
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <!-- Submit Button -->
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <span class="htmx-indicator spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <i class="bi bi-person-plus-fill me-2"></i>
+            Create Account
+        </button>
+    </div>
+</form>

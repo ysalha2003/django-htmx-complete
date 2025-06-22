@@ -1,0 +1,74 @@
+/* static/css/custom.css */
+
+/* Ensure form controls have proper styling */
+.form-control {
+    border-radius: 8px !important;
+    border: 2px solid #e2e8f0 !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.15) !important;
+}
+
+/* Validation message styles */
+.validation-success {
+    color: #22c55e !important;
+    font-size: 0.875rem !important;
+    margin-top: 0.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    animation: slideIn 0.3s ease !important;
+}
+
+.validation-error {
+    color: #ef4444 !important;
+    font-size: 0.875rem !important;
+    margin-top: 0.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    animation: slideIn 0.3s ease !important;
+}
+
+.validation-warning {
+    color: #f59e0b !important;
+    font-size: 0.875rem !important;
+    margin-top: 0.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    animation: slideIn 0.3s ease !important;
+}
+
+.validation-success i,
+.validation-error i,
+.validation-warning i {
+    margin-right: 0.5rem !important;
+    font-size: 1rem !important;
+}
+
+/* Animation */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* HTMX Loading indicator */
+.htmx-indicator {
+    opacity: 0;
+    transition: opacity 300ms ease-in;
+}
+
+.htmx-request .htmx-indicator {
+    opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+    opacity: 1;
+}

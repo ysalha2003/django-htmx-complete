@@ -1,0 +1,112 @@
+<!-- templates/partials/profile_form.html -->
+<form hx-post="{% url 'accounts:profile' %}" 
+      hx-target="#profile-form-container" 
+      hx-swap="innerHTML"
+      hx-encoding="multipart/form-data"
+      novalidate>
+    {% csrf_token %}
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="{{ form.phone_number.id_for_label }}" class="form-label">
+                Phone Number
+            </label>
+            {{ form.phone_number }}
+            <div id="phone-validation"></div>
+            {% if form.phone_number.errors %}
+                <div class="validation-error">
+                    <i class="bi bi-x-circle-fill"></i>
+                    {{ form.phone_number.errors|first }}
+                </div>
+            {% endif %}
+            <div class="form-text">Format: +1234567890</div>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            <label for="{{ form.birth_date.id_for_label }}" class="form-label">
+                Birth Date
+            </label>
+            {{ form.birth_date }}
+            {% if form.birth_date.errors %}
+                <div class="validation-error">
+                    <i class="bi bi-x-circle-fill"></i>
+                    {{ form.birth_date.errors|first }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="{{ form.website.id_for_label }}" class="form-label">
+                Website
+            </label>
+            {{ form.website }}
+            <div id="website-validation"></div>
+            {% if form.website.errors %}
+                <div class="validation-error">
+                    <i class="bi bi-x-circle-fill"></i>
+                    {{ form.website.errors|first }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            <label for="{{ form.location.id_for_label }}" class="form-label">
+                Location
+            </label>
+            {{ form.location }}
+            {% if form.location.errors %}
+                <div class="validation-error">
+                    <i class="bi bi-x-circle-fill"></i>
+                    {{ form.location.errors|first }}
+                </div>
+            {% endif %}
+            <div class="form-text">City, Country</div>
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <label for="{{ form.profile_picture.id_for_label }}" class="form-label">
+            Profile Picture
+        </label>
+        {{ form.profile_picture }}
+        {% if form.profile_picture.errors %}
+            <div class="validation-error">
+                <i class="bi bi-x-circle-fill"></i>
+                {{ form.profile_picture.errors|first }}
+            </div>
+        {% endif %}
+        {% if profile.profile_picture %}
+            <div class="mt-2">
+                <img src="{{ profile.profile_picture.url }}" 
+                     alt="Current profile picture" 
+                     class="img-thumbnail" 
+                     style="max-width: 150px;">
+                <p class="small text-muted mt-1">Current profile picture</p>
+            </div>
+        {% endif %}
+        <div class="form-text">Upload an image file (max 5MB)</div>
+    </div>
+    
+    <div class="mb-3">
+        <label for="{{ form.bio.id_for_label }}" class="form-label">
+            Bio
+        </label>
+        {{ form.bio }}
+        {% if form.bio.errors %}
+            <div class="validation-error">
+                <i class="bi bi-x-circle-fill"></i>
+                {{ form.bio.errors|first }}
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <span class="htmx-indicator spinner-border spinner-border-sm me-2" role="status"></span>
+            <i class="bi bi-save-fill me-2"></i>
+            Update Profile
+        </button>
+    </div>
+</form>

@@ -1,0 +1,36 @@
+<!-- templates/partials/contact_success.html -->
+<div class="text-center py-5">
+    <div class="mb-4">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+    </div>
+    <h3 class="text-success mb-3">Message Sent Successfully!</h3>
+    <div class="alert alert-success">
+        <p class="mb-3">
+            <strong>Thank you, {{ contact.name }}!</strong><br>
+            We've received your message about "<em>{{ contact.subject }}</em>" and will get back to you at 
+            <strong>{{ contact.email }}</strong> as soon as possible.
+        </p>
+        <small class="text-muted">
+            <i class="bi bi-info-circle me-1"></i>
+            Reference ID: #{{ contact.id }} | Category: {{ contact.get_category_display }}
+        </small>
+    </div>
+    
+    <div class="row g-3 justify-content-center">
+        <div class="col-auto">
+            <button class="btn btn-primary" 
+                    hx-get="{% url 'core:contact' %}" 
+                    hx-target="#contact-form-container" 
+                    hx-swap="innerHTML">
+                <i class="bi bi-envelope-fill me-2"></i>
+                Send Another Message
+            </button>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'core:home' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-house-fill me-2"></i>
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>
